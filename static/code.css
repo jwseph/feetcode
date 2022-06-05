@@ -8,3 +8,16 @@
 .CodeMirror-foldgutter {
     padding-right: 6px;
 }
+#code {
+    border: 1px solid #eeeeee;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+    background: #e2e2e2;
+    border: 2px solid #ffffff;
+}

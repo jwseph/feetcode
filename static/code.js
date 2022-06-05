@@ -32,7 +32,7 @@ const editor = CodeMirror($('#code')[0], {
 const indentRe = /^  *$/;
 editor.on('keydown', function (e) {
     var e = window.event || e;
-    if (e.key == 'Backspace') {
+    if (e.key == 'Backspace' && !e.ctrlKey) {
         var pos = editor.getCursor();
         var lines = editor.getValue().split('\n');
         var line = lines[pos.line];
