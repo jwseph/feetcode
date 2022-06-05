@@ -39,9 +39,6 @@ editor.on('keydown', function (e) {
             e.preventDefault();
             var ch = (~~((pos.ch-1)/4))*4;
             editor.replaceRange('', {line: pos.line, ch: ch}, {line: pos.line, ch: pos.ch});
-            // lines[cursor.line] = line.substring(0, pos)+line.substring(cursor.ch);
-            // editor.setValue(lines.join('\n'));
-            // editor.setCursor({line: cursor.line, ch: pos});
         }
     }
 });
