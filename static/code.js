@@ -14,6 +14,7 @@ const editor = CodeMirror($('#code')[0], {
     indentWithTab: true,
     styleActiveLine: true,
     extraKeys: {
+        'Ctrl-/': 'toggleComment',
         'Shift-Tab': 'indentLess',
         'Tab': function (cm) {
             if (editor.getSelection()) {
