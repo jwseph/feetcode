@@ -2,7 +2,7 @@
 /// <reference path="./codemirror.min.js" />
 
 const editor = CodeMirror($('#code')[0], {
-    value: 'class Solution:\r\n    def twoSum(self, arr, target):\r\n        m = {}\r\n        for i in range(len(arr)):\r\n            if target-arr[i] in m:\r\n                return [i, m[target-arr[i]]]\r\n            m[arr[i]] = i\r\n        return []',
+    value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
     mode: 'python',
     theme: 'textmate',
     lineNumbers: true,
