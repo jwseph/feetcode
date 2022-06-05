@@ -32,7 +32,7 @@ const editor = CodeMirror($('#code')[0], {
 const indentRe = /^  *$/;
 editor.on('keydown', function (e) {
     var e = window.event || e;
-    if (e.key == 'Backspace' && !e.ctrlKey) {
+    if (e.key == 'Backspace' && !e.ctrlKey && !editor.getSelection()) {
         var pos = editor.getCursor();
         var lines = editor.getValue().split('\n');
         var line = lines[pos.line];
@@ -45,4 +45,23 @@ editor.on('keydown', function (e) {
 });
 
 
-// editor.setOption('mode', 'javascript');
+const fileRe = /\/piston\/jobs\/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}\/file0.code/;
+$('#submit').on('click',function (e) {
+    console.log('click!');
+    $.post({
+        url: 'https://emkc.org/api/v1/piston/execute',
+        data: {
+            language: 'python3',
+            source: editor.getValue(),
+            stdin: 'Joseph\n',
+            run_timeout: 1000,
+            run_memory_limit: 100,
+            args: []
+        },
+        success: function (data) {
+            stdout = data.output.replace(fileRe, '/home/temp/file.py');
+            $('#output').text(stdout);
+            console.log(stdout);
+        }
+    });
+});
