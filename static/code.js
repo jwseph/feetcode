@@ -53,7 +53,7 @@ $('#submit').on('click',function (e) {
         data: {
             language: 'python3',
             source: editor.getValue(),
-            stdin: 'Joseph\n',
+            stdin: 'Input will be added soon!\n',
             run_timeout: 1000,
             run_memory_limit: 100,
             args: []
