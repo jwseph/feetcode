@@ -32,15 +32,16 @@ const indentRe = /^  *$/;
 editor.on('keydown', function (e) {
     var e = window.event || e;
     if (e.key == 'Backspace') {
-        var cursor = editor.getCursor();
+        var pos = editor.getCursor();
         var lines = editor.getValue().split('\n');
-        var line = lines[cursor.line];
-        if (indentRe.test(line.substring(0, cursor.ch))) {
+        var line = lines[pos.line];
+        if (indentRe.test(line.substring(0, pos.ch))) {
             e.preventDefault();
-            var pos = (~~((cursor.ch-1)/4))*4;
-            lines[cursor.line] = line.substring(0, pos)+line.substring(cursor.ch);
-            editor.setValue(lines.join('\n'));
-            editor.setCursor({line: cursor.line, ch: pos});
+            var ch = (~~((pos.ch-1)/4))*4;
+            editor.replaceRange('', {line: pos.line, ch: ch}, {line: pos.line, ch: pos.ch});
+            // lines[cursor.line] = line.substring(0, pos)+line.substring(cursor.ch);
+            // editor.setValue(lines.join('\n'));
+            // editor.setCursor({line: cursor.line, ch: pos});
         }
     }
 });
