@@ -1,0 +1,10 @@
+.CodeMirror-wrap pre {
+    word-break: break-word;
+}
+.CodeMirror-gutters {
+    background-color: #ffffff;
+    border-right: 1px solid #eeeeee;
+}
+.CodeMirror-foldgutter {
+    padding-right: 6px;
+}
