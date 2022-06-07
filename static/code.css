@@ -1,28 +1,91 @@
+html {
+    overflow-y: hidden;
+}
 .CodeMirror-wrap pre {
     word-break: break-word;
 }
 .CodeMirror-gutters {
     background-color: #ffffff;
     border-right: 1px solid #eeeeee;
-    padding-left: 6px;
+    padding-left: 8px;
 }
-.CodeMirror-scroll {
-    padding-top: 4px;
-    padding-bottom: 46px;
+.CodeMirror-lines {
+    padding-top: 10px;
+    padding-bottom: 3px;
+    /* padding-right: 10px; */
+}
+.CodeMirror-line {
+    padding-right: 60px;
 }
 .CodeMirror-foldgutter {
     padding-right: 6px;
 }
-.CodeMirror pre.CodeMirror-line {
-    /* padding: 0 10px; */
+.CodeMirror-sizer {
+    margin-left: 60px !important;
 }
-.CodeMirror pre.CodeMirror-line > span {
-    /* margin: 0 -6px; */
-    /* padding: 0 10px; */
+.CodeMirror-linebackground {
+    left: -8px;
+}
+.CodeMirror-wrap {
+    height: 100%;
 }
 #code {
-    border: 1px solid #eeeeee;
+    height: 100%;
+    /* border: 1px solid #eeeeee; */
 }
 .stdio {
     white-space: pre-wrap;
+}
+#drag-container {
+    display: flex;
+    height: calc(100% - 44px);
+    border-bottom: outset 1px solid red;
+}
+#drag-left, #drag-right {
+    min-width: 25%;
+    width: 50%;
+    height: 100%;
+}
+#drag-right {
+    flex: 1;
+    height: 100%;
+}
+#dragbar {
+    display: block;
+    padding: 5px;
+    cursor: col-resize;
+    background: #fafafa;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    z-index: 1;
+}
+#dragbar:hover, #dragbar:active {
+    background: #c1cfd5;
+    transition-delay: 0.1s;
+}
+#dragbar:after {
+    left: 50%;
+    top: calc(calc(100% - 44px) / 2);
+    position: relative;
+    transform: translate(-50%, 0);
+    content: "";
+    opacity: 1;
+    width: 2px;
+    height: 2px;
+    border-radius: 100%;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    /* color: #b0bec5; */
+    color: #b0bec5;
+    background: transparent;
+    box-shadow: 0 -20px 0 currentColor, 0 -12px 0 currentColor, 0 -4px 0 currentColor, 0 4px 0 currentColor, 0 12px 0 currentColor, 0 20px 0 currentColor;
+    /* box-shadow: 0 8px 0 currentColor, 0 16px 0 currentColor, 0 24px 0 currentColor, 0 32px 0 currentColor, 0 40px 0 currentColor; */
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+}
+#dragbar:hover:after, #dragbar:active:after {
+    color: #fafafa;
+    transition-delay: 0.1s;
 }

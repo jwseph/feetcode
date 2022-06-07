@@ -4,6 +4,7 @@
 const editor = CodeMirror($('#code')[0], {
     value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
     mode: 'python',
+    // mode: 'text/x-c++src',
     theme: 'textmate',
     lineNumbers: true,
     lineWrapping: true,
@@ -64,4 +65,32 @@ $('#submit').on('click',function (e) {
             console.log(stdout);
         }
     });
+});
+
+
+
+
+var left = document.getElementById('drag-left');
+var right = document.getElementById('drag-right');
+var bar = document.getElementById('dragbar');
+var off = null;
+
+const drag = (e) => {
+  document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+  left.style.width = (e.pageX-off) + 'px';
+}
+
+bar.addEventListener('mousedown', (e) => {
+  var rect = e.target.getBoundingClientRect();
+  off = e.pageX-rect.left;
+  $('html,body').css('cursor','col-resize');
+  document.addEventListener('mousemove', drag);
+});
+
+document.addEventListener('mouseup', () => {
+    console.log('up');
+  if (off === null) return;
+  off = null;
+  $('html,body').css('cursor','');
+  document.removeEventListener('mousemove', drag);
 });
