@@ -18,10 +18,14 @@ html {
     padding-right: 60px;
 }
 .CodeMirror-foldgutter {
+    /* width: 15px; */
     padding-right: 6px;
 }
 .CodeMirror-sizer {
     margin-left: 60px !important;
+}
+.CodeMirror-gutters {
+    left: 0px !important;
 }
 .CodeMirror-linebackground {
     left: -8px;
@@ -65,7 +69,7 @@ html {
 }
 #dragbar:after {
     left: 50%;
-    top: calc(calc(100% - 44px) / 2);
+    top: calc(calc(100% - 44px) / 2); /* fix */
     position: relative;
     transform: translate(-50%, 0);
     content: "";
@@ -88,4 +92,18 @@ html {
 #dragbar:hover:after, #dragbar:active:after {
     color: #fafafa;
     transition-delay: 0.1s;
+}
+#problem-description {
+    display: block;
+    margin: 21px;
+    color: #263238;
+    line-height: 1.5em;
+}
+#problem-description .title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #212121;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
 }
