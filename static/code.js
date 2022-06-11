@@ -94,7 +94,7 @@ const languages = [
                 version: '3.10',
                 files: [
                     {
-                        name: 'control.py',
+                        name: 'runner.py',
                         content: 'import solution\r\ntwoSum = getattr(solution, "twoSum", None)\r\nif not callable(twoSum):\r\n    raise NameError("function \'twoSum\' is not defined")\r\nparam_1, param_2 = [1, 5, 4, 2, 3, 1, 4, 5, 7, 7, 8, 9, 2, 5, 1, 3, 5, 1, 3, 4, 1], 11\r\nret = twoSum(param_1, param_2)\r\nprint(ret)'
                     },
                     {
@@ -102,16 +102,22 @@ const languages = [
                         content: editor.getValue()
                     }
                 ],
-                stdin: '',
+                stdin: $('#input').text(),
                 run_timeout: 10000,
                 run_memory_limit: 100,
                 args: []
             },
             success: function (data) {
                 console.log(data);
-                stdout = data.run.stdout.replaceAll(fileRe, '');  // /home/temp
-                $('#output').text(stdout);
-                console.log(stdout);
+                if (!data.run.stderr) {
+                    stdout = data.run.stdout;
+                    $('#output').text(stdout);
+                    console.log(stdout);
+                } else {
+                    stderr = data.run.stdout.replaceAll(fileRe, '');
+                    $('#error').text(stderr);
+                    console.log(stderr);
+                }
             }
         });
     }],

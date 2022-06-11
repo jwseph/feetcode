@@ -40,6 +40,16 @@ html {
 .stdio {
     white-space: pre-wrap;
 }
+#input {
+    transition: 0.1s;
+    -webkit-user-modify: read-write-plaintext-only;
+    -ms-user-modify: read-write-plaintext-only;
+    user-modify: read-write-plaintext-only;
+}
+#input:focus {
+    outline: none;
+    border: 1px solid #556870;
+}
 #drag-container {
     display: flex;
     height: calc(100% - 43px);
