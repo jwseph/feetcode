@@ -58,7 +58,7 @@ html {
 }
 #dragbar {
     display: block;
-    padding: 5px;
+    padding: 4px;
     cursor: col-resize;
     background: #fafafa;
     transition-duration: 0.2s;
@@ -69,7 +69,7 @@ html {
 }
 #dragbar:hover, #dragbar:active {
     background: #c1cfd5;
-    transition-delay: 0.1s;
+    transition-delay: 0.2s;
     border-left: 1px solid #c1cfd5;
     border-right: 1px solid #c1cfd5;
 }
@@ -99,17 +99,83 @@ html {
     color: #fafafa;
     transition-delay: 0.1s;
 }
-#problem-description {
+#left-wrapper {
     display: block;
     padding: 21px;
     color: #263238;
     line-height: 1.5em;
 }
-#problem-description .title {
+#left-wrapper .title {
     font-weight: 600;
     font-size: 16px;
     color: #212121;
+}
+#left-wrapper.problem .title {
     border-bottom: 1px solid #eeeeee;
     padding-bottom: 1em;
     margin-bottom: 1em;
+}
+#left-wrapper.problem .console {
+    display: none;
+}
+#left-wrapper.console .title {
+    margin-bottom: 0.5em;
+}
+#left-wrapper.console .problem {
+    display: none;
+}
+#left-wrapper .title span.darkgreen {
+    color: #388e3c;
+}
+#left-wrapper .title span.green {
+    color: #26a69a;
+}
+#left-wrapper .title span.red {
+    color: #d81b60;
+}
+button.toggle {
+    float: right;
+    vertical-align: top;
+    margin: 0;
+    background: transparent;
+    /* color: #212121; */
+    color: #263238;
+    /* border-radius: 10000px; */
+    /* width: 3em;
+    height: 3em;
+    margin-top: -0.75em;
+    margin-bottom: -0.75em; */
+    width: 2.25em;
+    height: 2.25em;
+    margin-top: -0.375em;
+    margin-bottom: -0.375em;
+    padding: 6px;
+    transition: 0.1s;
+}
+button.toggle:hover {
+    background: #f2f4f7;
+    color: #212121;
+}
+button.toggle:active {
+    background: #e7e9ee;
+    color: #212121;
+}
+button.toggle svg {
+    width: auto;
+    height: auto;
+    transition: 0.1s;
+}
+table {
+    color: inherit;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: auto;
+}
+td:first-child {
+    padding-right: 16px;
+    white-space: nowrap;
+    width: fit-content;
+}
+td:last-child {
+    width: 100%;
 }

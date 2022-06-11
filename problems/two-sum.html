@@ -36,25 +36,67 @@
     <body>
         <div id="navbar" style="position:relative">
             <a href="/" class="logo">FEETCODE</a>
-            <a href="/">Home</a> →
-            <a href="/problems">Problems</a> →
+            <a href="/">Home</a>
+            <span>→</span>
+            <a href="/problems">Problems</a>
+            <span>→</span>
             <a href="/problems/two-sum">Two Sum</a>
-            <button id="submit" style="position:absolute; top:50%; left:100%; transform:translate(calc(-100% - 4px), -50%); float:right">Submit</button>
+            <div style="text-align:right; display:table-cell; vertical-align:middle;">
+                <div style="display:table; width:100%;">
+                    <button id="language" class="clear" style="display:table-cell; vertical-align:middle; margin-left:12px;">C++</button>
+                    <button id="run" class="white" style="display:table-cell; vertical-align:middle; margin-left:12px;">Run Code</button>
+                    <button id="submit" class="black" style="display:table-cell; vertical-align:middle; margin-left:12px;">Submit</button>
+                </div>
+            </div>
         </div>
         <div id="drag-container">
             <div id="drag-left">
-                <div id="problem-description">
-                    <div class="title">1. Two Sum</div>
-                    <img src="https://qph.cf2.quoracdn.net/main-qimg-2d8ba8cb4941c6f156e47f1c69553350-lq"></img>
-                    <p>
-                        Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-                    </p>
-                    <p>
-                        You may assume that each input would have exactly one solution, and you may not use the same element twice.
-                    </p>
-                    <p>
-                        You can return the answer in any order.
-                    </p>
+                <div id="left-wrapper" class="problem">
+                    <div class="title">
+                        <span class="problem" style="font-size:inherit;">1. Two Sum</span>
+                        <span class="darkgreen console" style="font-size:inherit;">Accepted</span>
+                        <button class="toggle">
+                            <svg class="problem" style="fill:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13,19V16H21V19H13M8.5,13L2.47,7H6.71L11.67,11.95C12.25,12.54 12.25,13.5 11.67,14.07L6.74,19H2.5L8.5,13Z"/>
+                            </svg>
+                            <svg class="console" style="fill:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21,6V9H3V6H21M3,19H12V16H3V18M3,14H21V11H3V13Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="problem">
+                        <!-- <img src="https://qph.cf2.quoracdn.net/main-qimg-2d8ba8cb4941c6f156e47f1c69553350-lq"></img> -->
+                        <p>
+                            Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+                        </p>
+                        <p>
+                            You may assume that each input would have exactly one solution, and you may not use the same element twice.
+                        </p>
+                        <p>
+                            You can return the answer in any order.
+                        </p>
+                    </div>
+                    <div class="console">
+                        <div id="stdio" class="display:flow-root;">
+                            <table>
+                                <tr>
+                                    <td>Input</td>
+                                    <td class="stdio" id="input">abc</td>
+                                </tr>
+                                <tr>
+                                    <td>Output</td>
+                                    <td class="stdio" id="output">hello</td>
+                                </tr>
+                                <tr>
+                                    <td>Expected</td>
+                                    <td class="stdio" id="expected">def</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="error" class="stdio" style="background:#fce4ec; color:#e91e62; border:none;">
+                            There was an error.
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="dragbar"></div>

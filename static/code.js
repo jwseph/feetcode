@@ -2,7 +2,8 @@
 /// <reference path="./codemirror.min.js" />
 
 const editor = CodeMirror($('#code')[0], {
-    value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
+    // value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
+    value: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return',
     mode: 'python',
     // mode: 'text/x-c++src',
     theme: 'textmate',
@@ -46,51 +47,95 @@ editor.on('keydown', function (e) {
 });
 
 
-const fileRe = /\/piston\/jobs\/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}\/file0.code/;
 $('#submit').on('click',function (e) {
     console.log('click!');
-    $.post({
-        url: 'https://emkc.org/api/v1/piston/execute',
-        data: {
-            language: 'python3',
-            source: editor.getValue(),
-            stdin: 'Input will be added soon!\n',
-            run_timeout: 1000,
-            run_memory_limit: 100,
-            args: []
-        },
-        success: function (data) {
-            stdout = data.output.replace(fileRe, '/home/temp/file.py');
-            $('#output').text(stdout);
-            console.log(stdout);
-        }
-    });
+    languages[language][1]();
 });
 
 
 
+// Dragbar
+var $left = $('#drag-left');
+var dragOffset = null;
 
-var left = document.getElementById('drag-left');
-var right = document.getElementById('drag-right');
-var bar = document.getElementById('dragbar');
-var off = null;
-
-const drag = (e) => {
-  document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
-  left.style.width = (e.pageX-off) + 'px';
+const drag = e => {
+  document.selection?document.selection.empty():window.getSelection().removeAllRanges();
+  $left.css('width', (e.pageX-dragOffset)+'px');
 }
 
-bar.addEventListener('mousedown', (e) => {
+$('#dragbar').on('mousedown', e => {
   var rect = e.target.getBoundingClientRect();
-  off = e.pageX-rect.left;
+  dragOffset = e.pageX-rect.left;
   $('html,body').css('cursor','col-resize');
-  document.addEventListener('mousemove', drag);
+  $(document).on('mousemove', drag);
 });
 
-document.addEventListener('mouseup', () => {
-    console.log('up');
-  if (off === null) return;
-  off = null;
-  $('html,body').css('cursor','');
-  document.removeEventListener('mousemove', drag);
+$(document).on('mouseup', () => {
+  if (dragOffset === null) return;
+  dragOffset = null;
+  $('html, body').css('cursor','');
+  $(document).off('mousemove', drag);
+});
+
+
+
+
+if (localStorage.language === undefined) {
+    localStorage.language = 0;
+}
+
+const fileRe = /\/piston\/jobs\/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}\//g;
+const languages = [
+    ['Python', () => {
+        $.post({
+            url: 'https://emkc.org/api/v2/piston/execute',
+            data: {
+                language: 'python',
+                version: '3.10',
+                files: [
+                    {
+                        name: 'control.py',
+                        content: 'import solution\r\ntwoSum = getattr(solution, "twoSum", None)\r\nif not callable(twoSum):\r\n    raise NameError("function \'twoSum\' is not defined")\r\nparam_1, param_2 = [1, 5, 4, 2, 3, 1, 4, 5, 7, 7, 8, 9, 2, 5, 1, 3, 5, 1, 3, 4, 1], 11\r\nret = twoSum(param_1, param_2)\r\nprint(ret)'
+                    },
+                    {
+                        name: 'solution.py',
+                        content: editor.getValue()
+                    }
+                ],
+                stdin: '',
+                run_timeout: 10000,
+                run_memory_limit: 100,
+                args: []
+            },
+            success: function (data) {
+                console.log(data);
+                stdout = data.run.stdout.replaceAll(fileRe, '');  // /home/temp
+                $('#output').text(stdout);
+                console.log(stdout);
+            }
+        });
+    }],
+    ['Java', () => {}],
+    ['C++', () => {}],
+];
+var language = localStorage.language;
+
+$('#language').text(languages[language][0]).on('click', function () {
+    language = localStorage.language = (language+1)%languages.length;
+    $(this).text(languages[language][0]);
+});
+
+
+
+
+
+var consoleMode = 0;  // add localStorage later! 0: Run Code, 1: Submission Error, 2: Success
+
+$('.toggle').on('click', () => {
+    console.log('a');
+    if ($('#left-wrapper').is('.problem')) {
+        $('#left-wrapper').removeClass('problem').addClass('console');
+    } else {
+        $('#left-wrapper').removeClass('console').addClass('problem');
+    }
 });
