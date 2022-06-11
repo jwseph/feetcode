@@ -22,13 +22,13 @@ html {
     padding-right: 6px;
 }
 .CodeMirror-sizer {
-    margin-left: 60px !important;
+    margin-left: 58px !important;
 }
 .CodeMirror-gutters {
     left: 0px !important;
 }
 .CodeMirror-linebackground {
-    left: -8px;
+    left: -6px;
 }
 .CodeMirror-wrap {
     height: 100%;
@@ -42,8 +42,10 @@ html {
 }
 #drag-container {
     display: flex;
-    height: calc(100% - 44px);
-    border-bottom: outset 1px solid red;
+    height: calc(100% - 43px);
+}
+#drag-left {
+    overflow-y: auto;
 }
 #drag-left, #drag-right {
     min-width: 25%;
@@ -62,16 +64,20 @@ html {
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     z-index: 1;
+    border-left: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
 }
 #dragbar:hover, #dragbar:active {
     background: #c1cfd5;
     transition-delay: 0.1s;
+    border-left: 1px solid #c1cfd5;
+    border-right: 1px solid #c1cfd5;
 }
 #dragbar:after {
     left: 50%;
-    top: calc(calc(100% - 44px) / 2); /* fix */
+    top: calc(calc(100% - 43px) / 2); /* fix */
     position: relative;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
     content: "";
     opacity: 1;
     width: 2px;
@@ -95,7 +101,7 @@ html {
 }
 #problem-description {
     display: block;
-    margin: 21px;
+    padding: 21px;
     color: #263238;
     line-height: 1.5em;
 }
