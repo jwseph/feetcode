@@ -12,15 +12,18 @@
 * {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-    font-size: 14px;
+    font-size: 16px;
 }
 body {
     margin: 0;
 }
-.CodeMirror *, .stdio, code, pre {
+.CodeMirror * {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Source Code Pro', monospace;
-    /* font-family: 'Menlo', 'Ubuntu Mono', 'Consolas', 'Source Code Pro', monospace; */
-    font-size: 12px;
+    font-size: 14px;
+}
+.stdio, code, pre {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 14px;
 }
 .stdio {
     vertical-align: top;
@@ -30,7 +33,7 @@ body {
     border: 1px solid #eeeeee;
     border-radius: 2px;
     line-height: 1.4em;
-    min-height: 12px;
+    min-height: 14px;
 }
 .label {
     display: inline-block;
@@ -70,15 +73,18 @@ button.black:active {
 button.white {
     background: #ffffff;
     color: #263238;
-    box-shadow: inset 1px 0 #b0bec5, inset -1px 0 #b0bec5, inset 0 1px #b0bec5, inset 0 -1px #b0bec5;
+    line-height: calc(2.2em - 4px);
+    padding-left: calc(1.2em - 1px);
+    padding-right: calc(1.2em - 1px);
+    border: 1px solid #b0bec5;
 }
 button.white:hover {
     background: #edeff3;
-    box-shadow: inset 1px 0 #263238, inset -1px 0 #263238, inset 0 1px #263238, inset 0 -1px #263238;
+    border: 1px solid #263238;
 }
 button.white:active {
     background: #d8dce2;
-    box-shadow: inset 1px 0 #263238, inset -1px 0 #263238, inset 0 1px #263238, inset 0 -1px #263238;
+    border: 1px solid #263238;
 }
 button.clear {
     background: transparent;

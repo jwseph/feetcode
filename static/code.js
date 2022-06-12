@@ -1,6 +1,7 @@
 /// <reference path="./jquery.min.js" />
 /// <reference path="./codemirror.min.js" />
 
+
 const editor = CodeMirror($('#code')[0], {
     // value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
     value: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return [-1, -1]',
@@ -30,6 +31,7 @@ const editor = CodeMirror($('#code')[0], {
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
 });
 
+
 // Backspace tab deletion
 const indentRe = /^  *$/;
 editor.on('keydown', function (e) {
@@ -47,10 +49,30 @@ editor.on('keydown', function (e) {
 });
 
 
-$('#submit').on('click',function (e) {
+$('#run').on('click', function (e) {
     console.log('click!');
-    $('#output').text('...')
-    languages[language][1]();
+    $('#left-wrapper').removeClass('problem').addClass('console');
+    $('#output, #expected').html('<span style="color:inherit; font-family:inherit; font-size:inherit; opacity:0.4; cursor:default;">...</span>');
+    $('#stdout').parent().css('display', 'none');
+    $('#error').css('display', 'none');
+    $('.title span.status').removeClass('darkgreen green red').text('Running...');
+    $('.title span.runtime').text('');
+    languages[language][2](editor.getValue(), language, function () {
+        $('.title span.status').addClass('darkgreen').text('Accepted');
+    });
+});
+
+$('#submit').on('click', function (e) {
+    console.log('click!');
+    $('#left-wrapper').removeClass('problem').addClass('console');
+    $('#output, #expected').html('<span style="color:inherit; font-family:inherit; font-size:inherit; opacity:0.4; cursor:default;">...</span>');
+    $('#stdout').parent().css('display', 'none');
+    $('#error').css('display', 'none');
+    $('.title span.status').removeClass('darkgreen green red').text('Running...');
+    $('.title span.runtime').text('');
+    languages[language][2](editor.getValue(), language, function () {
+        $('.title span.status').addClass('green').text('Success');
+    });
 });
 
 
@@ -84,10 +106,49 @@ $(document).on('mouseup', () => {
 if (localStorage.language === undefined) {
     localStorage.language = 0;
 }
+if (localStorage.obj === undefined) {
+    localStorage.obj = '{}';
+}
 
 const fileRe = /\/piston\/jobs\/[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}\//g;
+
+function judge(data, lang, callback) {
+    console.log(data);
+    console.log(data.run.stdout);
+    console.log(data.run.stderr);
+    var out = data.run.stdout.split('Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne');
+    console.log(callback);
+    obj = {stdout: out[0], stdin: out[1], output: out[2], expected: out[3], runtime: out[4], stderr: data.run.stderr.replaceAll(fileRe, ''), callback: '('+callback+')()'}
+    setDisplay(obj);
+    localStorage.obj = JSON.stringify(obj);
+}
+
+function setDisplay(obj) {
+    if (obj.callback === undefined) return;
+    $('#output').text(obj.output);
+    $('#expected').text(obj.expected);
+    if (obj.stdin) {
+        $('#input').text(obj.stdin);
+    }
+    if (obj.stdout) {
+        $('#stdout').text(obj.stdout).parent().css('display', '');
+    }
+    if (obj.stderr) {
+        $('#error').text(obj.stderr).css('display', 'block');
+        $('.title span.status').addClass('red').text('Runtime Error');
+    } else if (obj.output != obj.expected) {
+        $('.title span.status').addClass('red').text('Wrong Answer');
+        $('.title span.runtime').text('Runtime: '+obj.runtime+'ms');
+    } else {
+        console.log(obj);
+        eval(obj.callback);
+        $('.title span.runtime').text('Runtime: '+obj.runtime+'ms');
+    }
+}
+setDisplay(JSON.parse(localStorage.obj));
+
 const languages = [
-    ['Python', () => {
+    ['Python', 'python', (input, lang, callback) => {
         $.post({
             url: 'https://emkc.org/api/v2/piston/execute',
             data: {
@@ -96,11 +157,15 @@ const languages = [
                 files: [
                     {
                         name: 'runner.py',
-                        content: 'import solution\r\ntwoSum = getattr(solution, "twoSum", None)\r\nif not callable(twoSum):\r\n    raise NameError("function \'twoSum\' is not defined")\r\nn = int(input())\r\nfor i in range(n):\r\n    param_1 = [int(n) for n in input().split(\' \')]\r\n    param_2 = int(input())\r\n    ret = twoSum(param_1, param_2)\r\n    print(" ".join(map(str, ret)))'
+                        content: 'from time import time\nimport solution\ntwoSum = getattr(solution, "twoSum", None)\nif not callable(twoSum):\n    raise NameError("function \'twoSum\' is not defined")\nfrom expected import twoSum as _twoSum\nstdin = [(input(), input()) for n in range(int(input()))]\nout1 = ""\nout2 = ""\ndelim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne"\nruntime = 0\nfor line1, line2 in stdin:\n    param_1 = [int(n) for n in line1.split(" ")]\n    param_2 = int(line2)\n    start = time()\n    res = twoSum(param_1, param_2)\n    end = time()\n    runtime += end-start\n    str1 = " ".join(map(str, res))+"\\n"\n    res = _twoSum(param_1, param_2)\n    str2 = " ".join(map(str, res))+"\\n"\n    if str1 != str2:\n        print(delim+line1+\'\\n\'+line2+delim+str1+delim+str2+delim+str(int(runtime*1000)), end="")\n        exit()\n    out1 += str1\n    out2 += str2\nprint(delim+delim+out1+delim+out2+delim+str(int(runtime*1000)), end="")'
                     },
                     {
                         name: 'solution.py',
-                        content: editor.getValue()
+                        content: input
+                    },
+                    {
+                        name: 'expected.py',
+                        content: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return [-1, -1]'
                     }
                 ],
                 stdin: ((text) => {var a = ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text; console.log(a); return a;})($('#input').text().trim()),  // 2 is number of lines each inp
@@ -108,35 +173,37 @@ const languages = [
                 run_memory_limit: 100,
                 args: []
             },
-            success: function (data) {
-                console.log(data);
-                if (!data.run.stderr) {
-                    stdout = data.run.stdout;
-                    $('#output').text(stdout);
-                    console.log(stdout);
-                } else {
-                    stderr = data.run.stdout.replaceAll(fileRe, '');
-                    $('#error').text(stderr);
-                    console.log(stderr);
-                }
-            }
+            success: data => judge(data, lang, callback)
         });
     }],
-    ['Java', () => {}],
-    ['C++', () => {}],
+    // ['Java', () => {}],
+    // ['C++', () => {}],
 ];
-var language = localStorage.language;
 
-$('#language').text(languages[language][0]).on('click', function () {
-    language = localStorage.language = (language+1)%languages.length;
-    $(this).text(languages[language][0]);
+
+if (localStorage.saves === undefined) {
+    localStorage.saves = JSON.stringify({
+        Python: 'def twoSum(nums, target):\r\n    """\r\n    :type nums: list[int]\r\n    :type target: int\r\n    :rtype: list[int]\r\n    """',
+    });
+}
+var saves = JSON.parse(localStorage.saves);
+editor.on('change', function (cm) {
+    saves[languages[language][0]] = cm.getValue();
+    localStorage.saves = JSON.stringify(saves);
 });
 
+var language = localStorage.language;
+setLanguage();
+$('#language').on('click', function () {
+    language = localStorage.language = (language+1)%languages.length;
+    setLanguage();
+});
+function setLanguage() {
+    $('#language').text(languages[language][0]);
+    editor.setOption('mode', languages[language][1]);
+    editor.setValue(saves[languages[language][0]]);
+}
 
-
-
-
-var consoleMode = 0;  // add localStorage later! 0: Run Code, 1: Submission Error, 2: Success
 
 $('.toggle').on('click', () => {
     console.log('a');

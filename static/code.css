@@ -42,20 +42,24 @@ html {
 }
 #input {
     transition: 0.1s;
+    transition-timing-function: ease-in-out;
     -webkit-user-modify: read-write-plaintext-only;
     -ms-user-modify: read-write-plaintext-only;
     user-modify: read-write-plaintext-only;
 }
 #input:hover {
-    border: 1px solid #a3a5ab;
+    border: 1px solid #d4d4d4;
+    /* border: 1px solid #a2a8ac; */
 }
 #input:focus {
     outline: none;
-    border: 1px solid #556870;
+    /* border: 1px solid #53676f; */
+    border: 1px solid #d4d4d4;
 }
 #drag-container {
     display: flex;
-    height: calc(100% - 43px);
+    height: calc(100% - 49px);
+    outline: 1px solid red;
 }
 #drag-left {
     overflow-y: auto;
@@ -116,11 +120,11 @@ html {
     display: block;
     padding: 21px;
     color: #263238;
-    line-height: 1.5em;
+    line-height: 1.6em;
 }
 #left-wrapper .title {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 18px;
     color: #212121;
 }
 #left-wrapper.problem .title {
@@ -145,6 +149,46 @@ html {
 }
 #left-wrapper .title span.red {
     color: #d81b60;
+}
+#left-wrapper .title span.runtime {
+    font-size: 16px;
+    font-weight: 500;
+    color: #bdbdbd;
+}
+#left-wrapper > .problem code {
+    background: #f7f9fa;
+    color: #546e7a;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+pre {
+    background: #f7f9fa;
+    color: inherit;
+    padding: 10px 15px;
+    line-height: 1.6em;
+    border-radius: 3px;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+pre * {
+    font-family: inherit;
+    font-size: inherit;
+}
+sup {
+    top: -0.5em;
+}
+sub {
+    top: 0.5em;
+}
+sub, sup {
+    font-family: inherit;
+    position: relative;
+    font-size: 75%;
+    line-height: 0;
+    vertical-align: baseline;
+}
+li {
+    line-height: 1.4em;
 }
 button.toggle {
     float: right;
