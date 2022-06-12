@@ -150,22 +150,20 @@ function setDisplay(obj) {
     if (obj.callback === undefined) return;
     $('#output').text(obj.output);
     $('#expected').text(obj.expected);
-    if (obj.stdin) {
-        $('#input').text(obj.stdin).parent().css('display', '');
-    }
     if (obj.stdout) {
         $('#stdout').text(obj.stdout).parent().css('display', '');
     }
     if (obj.stderr) {
         $('#error').text(obj.stderr).css('display', 'block');
         $('.title span.status').addClass('red').text('Runtime Error');
-    } else if (obj.output != obj.expected) {
+    } else if (obj.stdin) {
+        $('#input').text(obj.stdin).parent().css('display', '');
         $('.title span.status').addClass('red').text('Wrong Answer');
-        $('.title span.runtime').text('Runtime: '+obj.runtime+'ms');
+        $('.title span.runtime').text('Runtime: '+obj.runtime+' ms');
     } else {
         console.log(obj);
         eval(obj.callback);
-        $('.title span.runtime').text('Runtime: '+obj.runtime+'ms');
+        $('.title span.runtime').text('Runtime: '+obj.runtime+' ms');
     }
 }
 setDisplay(JSON.parse(localStorage.obj));
