@@ -46,6 +46,9 @@ html {
     -ms-user-modify: read-write-plaintext-only;
     user-modify: read-write-plaintext-only;
 }
+#input:hover {
+    border: 1px solid #a3a5ab;
+}
 #input:focus {
     outline: none;
     border: 1px solid #556870;

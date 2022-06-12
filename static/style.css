@@ -1,14 +1,14 @@
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
     background: #e2e2e2;
-    border: 2px solid transparent;
-} */
+    border: 2px solid #ffffff;
+}
 * {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';

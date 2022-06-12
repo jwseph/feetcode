@@ -3,7 +3,7 @@
 
 const editor = CodeMirror($('#code')[0], {
     // value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
-    value: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return',
+    value: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return [-1, -1]',
     mode: 'python',
     // mode: 'text/x-c++src',
     theme: 'textmate',
@@ -49,6 +49,7 @@ editor.on('keydown', function (e) {
 
 $('#submit').on('click',function (e) {
     console.log('click!');
+    $('#output').text('...')
     languages[language][1]();
 });
 
@@ -95,14 +96,14 @@ const languages = [
                 files: [
                     {
                         name: 'runner.py',
-                        content: 'import solution\r\ntwoSum = getattr(solution, "twoSum", None)\r\nif not callable(twoSum):\r\n    raise NameError("function \'twoSum\' is not defined")\r\nparam_1, param_2 = [1, 5, 4, 2, 3, 1, 4, 5, 7, 7, 8, 9, 2, 5, 1, 3, 5, 1, 3, 4, 1], 11\r\nret = twoSum(param_1, param_2)\r\nprint(ret)'
+                        content: 'import solution\r\ntwoSum = getattr(solution, "twoSum", None)\r\nif not callable(twoSum):\r\n    raise NameError("function \'twoSum\' is not defined")\r\nn = int(input())\r\nfor i in range(n):\r\n    param_1 = [int(n) for n in input().split(\' \')]\r\n    param_2 = int(input())\r\n    ret = twoSum(param_1, param_2)\r\n    print(" ".join(map(str, ret)))'
                     },
                     {
                         name: 'solution.py',
                         content: editor.getValue()
                     }
                 ],
-                stdin: $('#input').text(),
+                stdin: ((text) => {var a = ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text; console.log(a); return a;})($('#input').text().trim()),  // 2 is number of lines each inp
                 run_timeout: 10000,
                 run_memory_limit: 100,
                 args: []
