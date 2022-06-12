@@ -49,6 +49,11 @@ editor.on('keydown', function (e) {
 });
 
 
+
+
+const testcases = '2 7 11 15\n9\n3 2 4\n6\n3 3\n6\n0 1 3 0\n0\n-1 1000000000 0 4 -999999999\n1\n';
+
+
 $('#run').on('click', function (e) {
     console.log('click!');
     $('#left-wrapper').removeClass('problem').addClass('console');
