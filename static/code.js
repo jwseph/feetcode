@@ -50,13 +50,11 @@ editor.on('keydown', function (e) {
 
 
 
-
 const testcases = '2 7 11 15\n9\n3 2 4\n6\n3 3\n6\n0 1 3 0\n0\n-1 1000000000 0 4 -999999999\n1\n';
 if (localStorage.lastInput === undefined) {
     localStorage.lastInput = null;
 }
 var lastInput = localStorage.lastInput;
-
 
 $('#run').on('click', function (e) {
     console.log('click!');
@@ -182,7 +180,7 @@ const languages = [
                 files: [
                     {
                         name: 'runner.py',
-                        content: 'from time import time\nimport solution\ntwoSum = getattr(solution, "twoSum", None)\nif not callable(twoSum):\n    raise NameError("function \'twoSum\' is not defined")\nfrom expected import twoSum as _twoSum\nstdin = [(input(), input()) for n in range(int(input()))]\nout1 = ""\nout2 = ""\ndelim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne"\nruntime = 0\nfor line1, line2 in stdin:\n    param_1 = [int(n) for n in line1.split(" ")]\n    param_2 = int(line2)\n    start = time()\n    res = twoSum(param_1, param_2)\n    end = time()\n    assert isinstance(res, list), "Return type should be list[int]"\n    runtime += end-start\n    str1 = " ".join(map(str, res))+"\\n"\n    res = _twoSum(param_1, param_2)\n    str2 = " ".join(map(str, res))+"\\n"\n    if str1 != str2:\n        print(delim+line1+\'\\n\'+line2+delim+str1+delim+str2+delim+str(int(runtime*1000)), end="")\n        exit()\n    out1 += str1\n    out2 += str2\nprint(delim+delim+out1+delim+out2+delim+str(int(runtime*1000)), end="")'
+                        content: 'from time import time\nimport solution\ntwoSum = getattr(solution, "twoSum", None)\nif not callable(twoSum):\n    raise NameError("function \'twoSum\' is not defined")\nfrom expected import twoSum as _twoSum\nstdin = [(input(), input()) for n in range(int(input()))]\nout1 = ""\nout2 = ""\ndelim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne"\nruntime = 0\nfor line1, line2 in stdin:\n    param_1 = [int(n) for n in line1.split(" ")]\n    param_2 = int(line2)\n    start = time()\n    res = twoSum(param_1, param_2)\n    end = time()\n    assert isinstance(res, list), "Return type should be list[int]"\n    runtime += end-start\n    str1 = " ".join(map(str, res))+"\\n"\n    _res = _twoSum(param_1, param_2)\n    str2 = " ".join(map(str, _res))+"\\n"\n    if res != _res and res[::-1] != _res:\n        print(delim+line1+\'\\n\'+line2+delim+str1+delim+str2+delim+str(int(runtime*1000)), end="")\n        exit()\n    out1 += str1\n    out2 += str2\nprint(delim+delim+out1+delim+out2+delim+str(int(runtime*1000)), end="")'
                     },
                     {
                         name: 'solution.py',
@@ -190,7 +188,7 @@ const languages = [
                     },
                     {
                         name: 'expected.py',
-                        content: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return [-1, -1]'
+                        content: 'def twoSum(arr, target):\n    m = {}\n    for i in range(len(arr)):\n        if target-arr[i] in m:\n            return [m[target-arr[i]], i]\n        m[arr[i]] = i\n    return [-1, -1]'
                     }
                 ],
                 stdin: ((text) => ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text)($('#input').text().trim()),  // 2 is number of lines each inp
