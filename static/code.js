@@ -52,16 +52,32 @@ editor.on('keydown', function (e) {
 
 
 const testcases = '2 7 11 15\n9\n3 2 4\n6\n3 3\n6\n0 1 3 0\n0\n-1 1000000000 0 4 -999999999\n1\n';
+if (localStorage.lastInput === undefined) {
+    localStorage.lastInput = null;
+}
+var lastInput = localStorage.lastInput;
 
 
 $('#run').on('click', function (e) {
     console.log('click!');
+    $('#output, #expected').html('<span>...</span>');
     $('#left-wrapper').removeClass('problem').addClass('console');
-    $('#output, #expected').html('<span style="color:inherit; font-family:inherit; font-size:inherit; opacity:0.4; cursor:default;">...</span>');
     $('#stdout').parent().css('display', 'none');
+    if ($('#input').text().trim() == "(hidden)" || $('#input').text().trim() == '') {
+        if (lastInput && lastInput != '(hidden)') {
+            $('#input').text(lastInput);
+            localStorage.lastInput = lastInput = null;
+        } else {
+            $('#input').text("2 7 11 15\n9");
+        }
+    }
     $('#error').css('display', 'none');
     $('.title span.status').removeClass('darkgreen green red').text('Running...');
     $('.title span.runtime').text('');
+    if (!~~((($('#input').text().trim().match(/\n/g)||[]).length+1)/2)) {
+        $('.title span.status').text('Not Enough Input');
+        return;
+    }
     languages[language][2](editor.getValue(), language, function () {
         $('.title span.status').addClass('darkgreen').text('Accepted');
     });
@@ -70,13 +86,17 @@ $('#run').on('click', function (e) {
 $('#submit').on('click', function (e) {
     console.log('click!');
     $('#left-wrapper').removeClass('problem').addClass('console');
-    $('#output, #expected').html('<span style="color:inherit; font-family:inherit; font-size:inherit; opacity:0.4; cursor:default;">...</span>');
-    $('#stdout').parent().css('display', 'none');
+    $('#output, #expected').html('<span>...</span>');
+    $('#stdout, #input').parent().css('display', 'none');
+    localStorage.lastInput = lastInput = $('#input').text();
+    $('#input').text(testcases);
     $('#error').css('display', 'none');
     $('.title span.status').removeClass('darkgreen green red').text('Running...');
     $('.title span.runtime').text('');
     languages[language][2](editor.getValue(), language, function () {
         $('.title span.status').addClass('green').text('Success');
+        $('#input').html('<span>(hidden)</span>').on('pointerdown touchstart', function () { $(this).text('').off('pointerdown touchstart') }).parent().css('display', '');
+        $('#output, #expected').html('<span>(hidden)</span>');
     });
 });
 
@@ -133,7 +153,7 @@ function setDisplay(obj) {
     $('#output').text(obj.output);
     $('#expected').text(obj.expected);
     if (obj.stdin) {
-        $('#input').text(obj.stdin);
+        $('#input').text(obj.stdin).parent().css('display', '');
     }
     if (obj.stdout) {
         $('#stdout').text(obj.stdout).parent().css('display', '');
@@ -173,7 +193,7 @@ const languages = [
                         content: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return [-1, -1]'
                     }
                 ],
-                stdin: ((text) => {var a = ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text; console.log(a); return a;})($('#input').text().trim()),  // 2 is number of lines each inp
+                stdin: ((text) => ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text)($('#input').text().trim()),  // 2 is number of lines each inp
                 run_timeout: 10000,
                 run_memory_limit: 100,
                 args: []

@@ -236,3 +236,10 @@ td:first-child {
 td:last-child {
     width: 100%;
 }
+td.stdio span {
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    opacity: 0.4;
+    cursor: default;
+}
