@@ -5,7 +5,6 @@
 const editor = CodeMirror($('#code')[0], {
     // value: "from random import random, choice\r\n\r\nclass Dragon:\r\n    def __init__(self, name, ferocity):\r\n        self.name = name\r\n        self.ferocity = ferocity\r\n        print('A new dragon has been born!')\r\n    def meow(self):\r\n        print(choice(['meow~', 'nya~~', 'nyan~']))\r\n    def roar(self):\r\n        print(choice(['ROAAAR!', 'rawr xd', '*growls*']))\r\n    def action(self):\r\n        print(self.name+': ', end='')\r\n        if random() < self.ferocity: self.roar()\r\n        else: self.meow()\r\n\r\ndario = Dragon('Dario', 0.3)\r\nfor n in range(4): dario.action()",
     value: 'def twoSum(arr, target):\r\n    m = {}\r\n    for i in range(len(arr)):\r\n        if target-arr[i] in m:\r\n            return [i, m[target-arr[i]]]\r\n        m[arr[i]] = i\r\n    return [-1, -1]',
-    mode: 'python',
     // mode: 'text/x-c++src',
     theme: 'textmate',
     lineNumbers: true,
@@ -168,7 +167,29 @@ function setDisplay(obj) {
 }
 setDisplay(JSON.parse(localStorage.obj));
 
-const languages = [
+const languages = [  // [Visible Name, Codemirror Name, Run Function]
+    ['Java', 'text/x-java', (input, lang, callback) => {
+        $.post({
+            url: 'https://emkc.org/api/v2/piston/execute',
+            data: {
+                language: 'java',
+                version: '15.0.2',
+                files: [
+                    {
+                        name: 'Main.java',
+                        content: 'import java.util.*;\nimport java.io.*;\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));\n        String[][] stdin = new String[Integer.parseInt(in.readLine())][2];\n        for (int i = 0; i < stdin.length; i++) {\n            stdin[i][0] = in.readLine();\n            stdin[i][1] = in.readLine();\n        }\n        String out1 = "";\n        String out2 = "";\n        String delim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne";\n        int runtime = 0;\n        for (int i = 0; i < stdin.length; i++) {\n            String line1 = stdin[i][0];\n            String line2 = stdin[i][1];\n            String[] temp = line1.split(" ");\n            int[] param1 = new int[temp.length];\n            for (int j = 0; j < temp.length; ++j) {\n                param1[j] = Integer.parseInt(temp[j]);\n            }\n            int param2 = Integer.parseInt(line2);\n            final long start = System.currentTimeMillis();\n            int[] res = (new Solution()).twoSum(param1, param2);\n            final long end = System.currentTimeMillis();\n            runtime += (int)(end-start);\n            String str1 = ""+res[0]+" "+res[1]+"\\n";\n            int[] _res = twoSum(param1, param2);\n            String str2 = ""+_res[0]+" "+_res[1]+"\\n";\n            if (!(res[0] == _res[0] && res[1] == _res[1] || res[0] == _res[1] && res[1] == _res[0])) {\n                System.out.print(delim+line1+"\\n"+line2+delim+str1+delim+str2+delim+runtime);\n                System.exit(0);\n            }\n            out1 += str1;\n            out2 += str2;\n        }\n        System.out.print(delim+delim+out1+delim+out2+delim+runtime);\n    }\n    private static int[] twoSum(int[] arr, int target) {\n        Map<Integer, Integer> hash = new HashMap<Integer, Integer>();\n        for (int i = arr.length-1; i >= 0; i--) {\n            int addend = target-arr[i];\n            if (hash.containsKey(addend)) {\n                return new int[]{i, hash.get(addend)};\n            }\n            hash.put(arr[i], i);\n        }\n        return new int[]{-1, -1};\n    }\n}\n'+input
+                    }
+                ],
+                stdin: ((text) => ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text)($('#input').text().trim()),  // 2 is number of lines each inp
+                run_timeout: 10000,
+                run_memory_limit: 100
+            },
+            success: data => judge(data, lang, callback),
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }],
     ['Python', 'python', (input, lang, callback) => {
         $.post({
             url: 'https://emkc.org/api/v2/piston/execute',
@@ -177,8 +198,8 @@ const languages = [
                 version: '3.10',
                 files: [
                     {
-                        name: 'runner.py',
-                        content: 'from time import time\nimport solution\ntwoSum = getattr(solution, "twoSum", None)\nif not callable(twoSum):\n    raise NameError("function \'twoSum\' is not defined")\nfrom expected import twoSum as _twoSum\nstdin = [(input(), input()) for n in range(int(input()))]\nout1 = ""\nout2 = ""\ndelim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne"\nruntime = 0\nfor line1, line2 in stdin:\n    param_1 = [int(n) for n in line1.split(" ")]\n    param_2 = int(line2)\n    start = time()\n    res = twoSum(param_1, param_2)\n    end = time()\n    assert isinstance(res, list), "Return type should be list[int]"\n    runtime += end-start\n    str1 = " ".join(map(str, res))+"\\n"\n    _res = _twoSum(param_1, param_2)\n    str2 = " ".join(map(str, _res))+"\\n"\n    if res != _res and res[::-1] != _res:\n        print(delim+line1+\'\\n\'+line2+delim+str1+delim+str2+delim+str(int(runtime*1000)), end="")\n        exit()\n    out1 += str1\n    out2 += str2\nprint(delim+delim+out1+delim+out2+delim+str(int(runtime*1000)), end="")'
+                        name: 'main.py',
+                        content: 'from time import time\nimport solution\ntwoSum = getattr(solution, "twoSum", None)\nif not callable(twoSum):\n    raise NameError("function \'twoSum\' is not defined")\nfrom expected import twoSum as _twoSum\nstdin = [(input(), input()) for n in range(int(input()))]\nout1 = ""\nout2 = ""\ndelim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne"\nruntime = 0\nfor line1, line2 in stdin:\n    param1 = [int(n) for n in line1.split(" ")]\n    param2 = int(line2)\n    start = time()\n    res = twoSum(param1, param2)\n    end = time()\n    assert isinstance(res, list), "Return type should be list[int]"\n    runtime += end-start\n    str1 = " ".join(map(str, res))+"\\n"\n    _res = _twoSum(param1, param2)\n    str2 = " ".join(map(str, _res))+"\\n"\n    if res != _res and res[::-1] != _res:\n        print(delim+line1+\'\\n\'+line2+delim+str1+delim+str2+delim+str(int(runtime*1000)), end="")\n        exit()\n    out1 += str1\n    out2 += str2\nprint(delim+delim+out1+delim+out2+delim+str(int(runtime*1000)), end="")'
                     },
                     {
                         name: 'solution.py',
@@ -191,23 +212,27 @@ const languages = [
                 ],
                 stdin: ((text) => ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text)($('#input').text().trim()),  // 2 is number of lines each inp
                 run_timeout: 10000,
-                run_memory_limit: 100,
-                args: []
+                run_memory_limit: 100
             },
             success: data => judge(data, lang, callback)
         });
     }],
-    // ['Java', () => {}],
     // ['C++', () => {}],
 ];
 
 
 if (localStorage.saves === undefined) {
-    localStorage.saves = JSON.stringify({
-        Python: 'def twoSum(nums, target):\r\n    """\r\n    :type nums: list[int]\r\n    :type target: int\r\n    :rtype: list[int]\r\n    """',
-    });
+    localStorage.saves = '{}';
 }
+var defaultSaves = {
+    Python: 'def twoSum(nums, target):\r\n    """\r\n    :type nums: list[int]\r\n    :type target: int\r\n    :rtype: list[int]\r\n    """',
+    Java: 'class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        \n    }\n}',
+};
 var saves = JSON.parse(localStorage.saves);
+// console.log(saves);
+console.log(saves.saves);
+saves = {...defaultSaves, ...saves};
+localStorage.saves = JSON.stringify(saves);
 editor.on('change', function (cm) {
     saves[languages[language][0]] = cm.getValue();
     localStorage.saves = JSON.stringify(saves);
