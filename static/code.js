@@ -229,10 +229,8 @@ var defaultSaves = {
     Java: 'class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        \n    }\n}',
 };
 var saves = JSON.parse(localStorage.saves);
-// console.log(saves);
 console.log(saves.saves);
 saves = {...defaultSaves, ...saves};
-localStorage.saves = JSON.stringify(saves);
 editor.on('change', function (cm) {
     saves[languages[language][0]] = cm.getValue();
     localStorage.saves = JSON.stringify(saves);
