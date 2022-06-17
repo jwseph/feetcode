@@ -240,10 +240,10 @@ editor.on('change', function (cm) {
     localStorage.saves = JSON.stringify(saves);
 });
 
-var language = localStorage.language;
+var language = +localStorage.language;
 setLanguage();
 $('#language').on('click', function () {
-    language = localStorage.language = (language+1)%languages.length;
+    localStorage.language = language = (language+1)%languages.length;
     setLanguage();
 });
 function setLanguage() {
