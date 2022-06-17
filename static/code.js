@@ -48,31 +48,30 @@ editor.on('keydown', function (e) {
 });
 
 
-
+const numLines = str => ~~(((str.match(/\n/g)||[]).length+1)/2);
 const testcases = '2 7 11 15\n9\n3 2 4\n6\n3 3\n6\n0 1 3 0\n0\n-1 1000000000 0 4 -999999999\n1\n';
 if (localStorage.lastInput === undefined) {
-    localStorage.lastInput = null;
+    localStorage.lastInput = "2 7 11 15\n9";
 }
 var lastInput = localStorage.lastInput;
+var runInput;
+$('#input').text(lastInput);
+$('#input').on('input', function (e) {
+    localStorage.lastInput = lastInput = $(this).text();
+});
 
 $('#run').on('click', function (e) {
     console.log('click!');
     $('#output, #expected').html('<span>...</span>');
     $('#left-wrapper').removeClass('problem').addClass('console');
     $('#stdout').parent().css('display', 'none');
-    if ($('#input').text().trim() == "(hidden)" || $('#input').text().trim() == '') {
-        if (lastInput && lastInput != '(hidden)') {
-            $('#input').text(lastInput);
-            localStorage.lastInput = lastInput = null;
-        } else {
-            $('#input').text("2 7 11 15\n9");
-        }
-    }
+    $('#input').text(lastInput);
+    runInput = lastInput;
     $('#error').css('display', 'none');
     $('.title span.status').removeClass('darkgreen green red').text('Running...');
     $('.title span.runtime').text('');
-    if (!~~((($('#input').text().trim().match(/\n/g)||[]).length+1)/2)) {
-        $('.title span.status').text('Not Enough Input');
+    if (!numLines($('#input').text().trim())) {
+        $('.title span.status').text('Incomplete Input');
         return;
     }
     languages[language][2](editor.getValue(), language, function () {
@@ -84,19 +83,27 @@ $('#submit').on('click', function (e) {
     console.log('click!');
     $('#left-wrapper').removeClass('problem').addClass('console');
     $('#output, #expected').html('<span>...</span>');
-    $('#stdout, #input').parent().css('display', 'none');
-    localStorage.lastInput = lastInput = $('#input').text();
-    $('#input').text(testcases);
+    $('#stdout').parent().css('display', 'none');
+    $('#input')
+        .attr('contenteditable', 'false')
+        .css({'border': '1px solid #eeeeee', '-webkit-user-modify': 'read-only', '-ms-user-modify': 'read-only', 'user-modify': 'read-only'})
+        .html('<span>(hidden)</span>')
+    ;
+    runInput = testcases;
     $('#error').css('display', 'none');
     $('.title span.status').removeClass('darkgreen green red').text('Running...');
     $('.title span.runtime').text('');
     languages[language][2](editor.getValue(), language, function () {
         $('.title span.status').addClass('green').text('Success');
-        $('#input').html('<span>(hidden)</span>').on('pointerdown touchstart', function () { $(this).text('').off('pointerdown touchstart') }).parent().css('display', '');
+        $('#input')
+            .on('pointerdown touchstart', function () { $(this).text(lastInput).off('pointerdown touchstart') })
+            .css({'border': '', '-webkit-user-modify': '', '-ms-user-modify': '', 'user-modify': ''})
+            .parent()
+                .css('display', '')
+        ;
         $('#output, #expected').html('<span>(hidden)</span>');
     });
 });
-
 
 
 // Dragbar
@@ -121,8 +128,6 @@ $(document).on('mouseup', () => {
   $('html, body').css('cursor','');
   $(document).off('mousemove', drag);
 });
-
-
 
 
 if (localStorage.language === undefined) {
@@ -180,7 +185,7 @@ const languages = [  // [Visible Name, Codemirror Name, Run Function]
                         content: 'import java.util.*;\nimport java.io.*;\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));\n        String[][] stdin = new String[Integer.parseInt(in.readLine())][2];\n        for (int i = 0; i < stdin.length; i++) {\n            stdin[i][0] = in.readLine();\n            stdin[i][1] = in.readLine();\n        }\n        String out1 = "";\n        String out2 = "";\n        String delim = "Auy2i2SvK9OM8i9Pxf6ogq0jJ9jGS8Ne";\n        int runtime = 0;\n        for (int i = 0; i < stdin.length; i++) {\n            String line1 = stdin[i][0];\n            String line2 = stdin[i][1];\n            String[] temp = line1.split(" ");\n            int[] param1 = new int[temp.length];\n            for (int j = 0; j < temp.length; ++j) {\n                param1[j] = Integer.parseInt(temp[j]);\n            }\n            int param2 = Integer.parseInt(line2);\n            final long start = System.currentTimeMillis();\n            int[] res = (new Solution()).twoSum(param1, param2);\n            final long end = System.currentTimeMillis();\n            runtime += (int)(end-start);\n            String str1 = ""+res[0]+" "+res[1]+"\\n";\n            int[] _res = twoSum(param1, param2);\n            String str2 = ""+_res[0]+" "+_res[1]+"\\n";\n            if (!(res[0] == _res[0] && res[1] == _res[1] || res[0] == _res[1] && res[1] == _res[0])) {\n                System.out.print(delim+line1+"\\n"+line2+delim+str1+delim+str2+delim+runtime);\n                System.exit(0);\n            }\n            out1 += str1;\n            out2 += str2;\n        }\n        System.out.print(delim+delim+out1+delim+out2+delim+runtime);\n    }\n    private static int[] twoSum(int[] arr, int target) {\n        Map<Integer, Integer> hash = new HashMap<Integer, Integer>();\n        for (int i = arr.length-1; i >= 0; i--) {\n            int addend = target-arr[i];\n            if (hash.containsKey(addend)) {\n                return new int[]{i, hash.get(addend)};\n            }\n            hash.put(arr[i], i);\n        }\n        return new int[]{-1, -1};\n    }\n}\n'+input
                     }
                 ],
-                stdin: ((text) => ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text)($('#input').text().trim()),  // 2 is number of lines each inp
+                stdin: (text => `${numLines(text)}\n${text}`)(runInput.trim()),
                 run_timeout: 10000,
                 run_memory_limit: 100
             },
@@ -210,7 +215,7 @@ const languages = [  // [Visible Name, Codemirror Name, Run Function]
                         content: 'def twoSum(arr, target):\n    m = {}\n    for i in range(len(arr)):\n        if target-arr[i] in m:\n            return [m[target-arr[i]], i]\n        m[arr[i]] = i\n    return [-1, -1]'
                     }
                 ],
-                stdin: ((text) => ""+~~(((text.match(/\n/g)||[]).length+1)/2)+"\n"+text)($('#input').text().trim()),  // 2 is number of lines each inp
+                stdin: (text => `${numLines(text)}\n${text}`)(runInput.trim()),
                 run_timeout: 10000,
                 run_memory_limit: 100
             },
