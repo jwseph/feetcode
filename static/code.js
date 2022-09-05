@@ -187,7 +187,6 @@ const languages = [  // [Visible Name, Codemirror Name, Run Function]
                 ],
                 stdin: (text => `${numLines(text)}\n${text}`)(runInput.trim()),
                 run_timeout: 10000,
-                run_memory_limit: 100
             },
             success: data => judge(data, lang, callback),
             error: function (data) {
@@ -217,7 +216,6 @@ const languages = [  // [Visible Name, Codemirror Name, Run Function]
                 ],
                 stdin: (text => `${numLines(text)}\n${text}`)(runInput.trim()),
                 run_timeout: 10000,
-                run_memory_limit: 100
             },
             success: data => judge(data, lang, callback)
         });
