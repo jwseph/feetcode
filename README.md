@@ -1,8 +1,6 @@
 # FeetCode
 [Problems: Two Sum](https://code.kamiak.org/problems/two-sum)
 
-Dropped due to lack of use :skull:
+Dropped due to lack of use :(
 
-hmu joseph#9050 and I might resume
-
-:(
+Message me at joseph#9050, and I might resume
